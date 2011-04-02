@@ -1,12 +1,18 @@
-var Validator = module.exports.Validator = function()
+require(__dirname+'/static/javascript/validation_checks');
+
+Validator = function()
 {
-    this.properties = { "name" : "1" };
+    this.properties = { };
+    this.addVariableToValidate = addVariableToValidate;
+    this.validate = validate;
+    this.getClientSideValidationParams = getClientSideValidationParams;
+    this.validation_checks = validation_checks;
 };
 
 //fieldName is a string, validationsToPerform is an array of strings representing functions, errorMessages is an array of errors associated with not passing those functions
 // Ex: if validationsToPerform[0] fails, errorMessages[0] will be returned.
 // Alternatively, pass a single string to errorMessages to have that error show up for all validation faiures for this field
-Validator.prototype.addVariableToValidate = function(fieldName,validationsToPerform,errorMessages) 
+addVariableToValidate = function(fieldName,validationsToPerform,errorMessages) 
 {
     if(!(errorMessages instanceof Array))
     {
@@ -26,9 +32,8 @@ Validator.prototype.addVariableToValidate = function(fieldName,validationsToPerf
 };
 
 //objectHolder must be a map!
-Validator.prototype.validate = function(objectHolder) 
+validate = function(objectHolder) 
 {
-
     for(var key in this.properties)
 	{
  		for(var i = 0; i < this.properties[key].validationsToPerform.length; i ++)
@@ -37,7 +42,7 @@ Validator.prototype.validate = function(objectHolder)
 			funcToCall = funcarray[0];
 			funcarray[0] = objectHolder[key];
 
-			if(this[funcToCall].apply(this,funcarray))
+			if(!this.validation_checks[funcToCall].apply(this,funcarray))
 			{
 				return this.properties[key].errorMessages[i];
 			}
@@ -46,12 +51,7 @@ Validator.prototype.validate = function(objectHolder)
 	return null;
 };
 
-Validator.prototype.required = function(value)
+getClientSideValidationParams = function()
 {
-	return (value == null || value.length == 0);
-};
-
-Validator.prototype.length = function(value,min,max)
-{;
-	return (value == null || value.length < min || value.length > max);
-};
+	return (this.properties);
+}

@@ -1,0 +1,11 @@
+script(type='text/javascript',src='/javascript/validation_checks.js')
+script(type='text/javascript') var properties = !{JSON.stringify(validate_params)};
+h1 Validation Tester
+form(action='/', method='POST', onsubmit='return validateClientSide(this);')
+  | <strong>Name:</strong>
+  input(type='text', id='name', name='name')
+  br
+  | <strong>Year:</strong>
+  input(type='text', id='year', name='year')
+  p
+    input(type='submit', value='Add Movie')
