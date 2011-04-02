@@ -1,3 +1,5 @@
+//NodeDog Validation class
+
 require(__dirname+'/static/javascript/validation_checks');
 
 Validator = function()
@@ -5,7 +7,7 @@ Validator = function()
     this.properties = { };
     this.addVariableToValidate = addVariableToValidate;
     this.validate = validate;
-    this.getClientSideValidationParams = getClientSideValidationParams;
+    this.getClientSideValidationProperties = getClientSideValidationProperties;
     this.validation_checks = validation_checks;
 };
 
@@ -51,7 +53,7 @@ validate = function(objectHolder)
 	return null;
 };
 
-getClientSideValidationParams = function()
+getClientSideValidationProperties = function()
 {
-	return (this.properties);
+	return "var properties = " + JSON.stringify(this.properties) + ";";
 }

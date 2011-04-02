@@ -1,3 +1,7 @@
+// Run this to test out the NodeDog Validator.
+// The code on the page is just to show how NodeDog validator can be used.
+// Express and Jade are not required to use NodeDog
+
 require('./validator');
 var express = require('express');
 
@@ -13,6 +17,8 @@ app.configure(function() {
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
+
+//important NodeDog Validator starts here code
 validatorObject = new Validator();
 validatorObject.addVariableToValidate("name",["required"],["Name is required!"]);
 validatorObject.addVariableToValidate("year",["required","length-4-4","isInt"],"Please enter a valid year");
@@ -21,32 +27,27 @@ app.get('/', function(req, httpResponse)
 {    
     httpResponse.render('list', 
     {
-       locals: {validate_params: validatorObject.getClientSideValidationParams(), error:null}
+       locals: {validate_properties: validatorObject.getClientSideValidationProperties(), msg:null}
     });
 });
 
-app.get('/error/:error', function(req, httpResponse)
+app.get('/message/:msg', function(req, httpResponse)
 {    
     httpResponse.render('list', 
     {
-       locals: {validate_params: validatorObject.getClientSideValidationParams(), error: req.params.error}
+       locals: {validate_properties: validatorObject.getClientSideValidationProperties(), message: req.params.msg}
     });
 });
 
 app.post('/', function(req, httpResponse)
 {
-    var objs = { "name" : req.body.name, "year" : req.body.year};
+	msg = validatorObject.validate(req.body);
 	
-	msg = validatorObject.validate(objs);
-	
-	if(msg != null)
+	if(msg == null)
 	{
-		httpResponse.redirect('/error/'+encodeURIComponent(msg)+"/");
+		msg = "All NodeDog validation passed!";
 	}
-	else
-	{
-		httpResponse.redirect('/');
-	}
+	httpResponse.redirect('/message/'+encodeURIComponent(msg)+"/");
 });
 
-app.listen(81);
+app.listen(4000);

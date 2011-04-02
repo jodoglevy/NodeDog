@@ -1,3 +1,6 @@
+//NodeDog Validation methods and client side javascript implementation
+
+// simply add a function to this map to be able to run that method server and client side during NodeDog Validation
 validation_checks = 
 {
 	required:
