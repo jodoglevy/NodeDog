@@ -47,9 +47,20 @@ validate = function(objectHolder)
 	{
  		for(var i = 0; i < this.properties[key].validationsToPerform.length; i ++)
 		{
- 			funcarray = this.properties[key].validationsToPerform[i].split("-");
+ 			funcarray = this.properties[key].validationsToPerform[i].split("(");
 			funcToCall = funcarray[0];
-			funcarray[0] = objectHolder[key];
+			
+			fieldVal = objectHolder[key];
+			
+			if(fieldVal == null)
+			{
+				fieldVal = "null";
+			}
+			
+			funcarray = (fieldVal + "," + funcarray[1]).split(",");
+			
+			lastVal = funcarray[funcarray.length-1].split(")");
+			funcarray[funcarray.length-1] = lastVal[0];
 
 			if(!this.validation_checks[funcToCall].apply(this,funcarray))
 			{

@@ -25,8 +25,8 @@ app.set('view engine', 'jade');
 // is the path to the validation_checks.js file containing the validation method definitions
 validatorObject = new Validator(__dirname+'/static/javascript/validation_checks');
 
-validatorObject.addVariableToValidate("name",["required"],["Name is required"]);
-validatorObject.addVariableToValidate("year",["required","exactLength-4","isInt"],["Year is required","Year must be 4 integers long","Year must be an integer"]);
+validatorObject.addVariableToValidate("name",["required()"],["Name is required"]);
+validatorObject.addVariableToValidate("year",["required()","exactLength(4)","isInt()"],["Year is required","Year must be 4 integers long","Year must be an integer"]);
 	  
 app.get('/', function(req, httpResponse)
 {    
