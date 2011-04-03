@@ -1,0 +1,32 @@
+NodeDog is a Node.js framework that makes validation on the client and the server easy.
+
+With NodeDog, you can specify how to check if a form is valid once and have validation work automatically on the client
+and server side.
+
+TO CREATE A VALIDATOR:
+validatorObject = new Validator(path_to_validation_checks.js);
+validatorObject.addVariableToValidate(form_field_name_whose_value_should_be_validated,array_of_string_function_names_used_to_check_this_value_found_in_validation_checks.js,array_of_string_error_messages);
+
+TO CHECK VALIDATION SERVER SIDE:
+validatorObject.validate(map_of_field_names_to_their_values);
+This method returns the error message if the input didn't pass validation and and null if there was no error (validation was passed successfully)
+
+TO CHECK VALIDATION CLIENT SIDE:
+Include script validation_checks.js on the page with the form needing to be validated
+Include a script tag containing the output of validatorObject.getClientSideValidationProperties() (run this method server side);
+For the form to validate, add attribute onsubmit='return validateClientSide(this);'
+
+TO ADD ADDITIONAL VALIDATION CHECKS TO NODEDOG:
+In the validation_checks map in validation_checks.js, add a new key,value pair where the key is the name of the validation and the value is the function to validate
+This function must always take atleast one parameter, the value for the function to validate. If the function takes more than one parameter, the first parameter must be the value to validate.
+This function should return true if validation was successful, false otherwise.
+
+To include this new validation check in your validator object, simply add it to the array of
+validatorObject.addVariableToValidate(form_field_name_whose_value_should_be_validated,array_of_string_function_names_used_to_check_this_value_found_in_validation_checks.js,array_of_string_error_messages);
+in the array_of_string_function_names_used_to_check_this_value_found_in_validation_checks parameter.
+If the validation function takes parameters (other than the value it needs to check, which it always takes), specify those parameters with dashes.
+
+Ex: if you wanted to check the length(value,1,3) on some value where 1 is the min length and 3 is the max length,
+you would specify "length-1-3".
+
+See app.js and validation_checks.js for an example implementation.

@@ -1,6 +1,7 @@
-//NodeDog Validation methods and client side javascript implementation
+//NodeDog validation methods and client side javascript implementation
 
-// simply add a function to this map to be able to run that method server and client side during NodeDog Validation
+// simply add a function to this map to be able to run that method server and client side
+// by specifying the key during NodeDog validator addVariableToValidate() method in the validationsToPerform field
 validation_checks = 
 {
 	required:
@@ -15,6 +16,24 @@ validation_checks =
 		return (value != null && value.length >= min && value.length <= max);
 	},
 	
+	exactLength:
+	function(value,exactly)
+	{
+		return (value != null && value.length == exactly);
+	},
+	
+	minLength:
+	function(value,min)
+	{
+		return (value != null && value.length >= min);
+	},
+	
+	maxLength:
+	function(value,max)
+	{
+		return (value != null && value.length <= max);
+	},
+	
 	isInt:
 	function(value)
 	{
@@ -22,6 +41,12 @@ validation_checks =
 	}
 }
 
+
+
+
+
+
+// client side version of NodeDog. Requires no change on your part!
 function validateClientSide(form) 
 {
     for(var key in properties)
