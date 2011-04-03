@@ -13,13 +13,13 @@ validation_checks =
 	length:
 	function(value,min,max)
 	{
-		return (value != null && value.length >= min && value.length <= max);
+		return validation_checks.minLength(value,min) && validation_checks.maxLength(value,max);
 	},
 	
 	exactLength:
 	function(value,exactly)
 	{
-		return (value != null && value.length == exactly);
+		return validation_checks.length(value,exactly,exactly);
 	},
 	
 	minLength:
