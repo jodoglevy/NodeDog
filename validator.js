@@ -31,9 +31,28 @@ addVariableToValidate = function(fieldName,validationsToPerform,errorMessages)
     	}
     }
     
+    var funcsToCall = [];
+    var paramsToUse = [];
+    for(var i = 0; i < validationsToPerform.length; i ++)
+	{
+ 		funcarray = validationsToPerform[i].split("(");
+		funcToCall = funcarray[0];
+				
+		params = (funcarray[1]).split(",");
+		lastVal = params[params.length-1].split(")");
+		params[params.length-1] = lastVal[0];
+		
+		funcsToCall[i] = funcToCall;
+		if(params != "")
+		{
+			paramsToUse[i] = params;
+		}
+	}
+    
     this.properties[fieldName] =
 	{
-		validationsToPerform: validationsToPerform,
+		functionsToCall: funcsToCall,
+		parametersToUse: paramsToUse,
      	errorMessages: errorMessages
 	};
 };
@@ -45,24 +64,21 @@ validate = function(objectHolder)
 {
     for(var key in this.properties)
 	{
- 		for(var i = 0; i < this.properties[key].validationsToPerform.length; i ++)
+ 		for(var i = 0; i < this.properties[key].functionsToCall.length; i ++)
 		{
- 			funcarray = this.properties[key].validationsToPerform[i].split("(");
-			funcToCall = funcarray[0];
-			
-			fieldVal = objectHolder[key];
-			
+ 			fieldVal = objectHolder[key];
 			if(fieldVal == null)
 			{
 				fieldVal = "null";
 			}
+			fieldVal = [fieldVal];
 			
-			funcarray = (fieldVal + "," + funcarray[1]).split(",");
+			funcToCall = this.properties[key].functionsToCall[i];
+			params = this.properties[key].parametersToUse[i];
 			
-			lastVal = funcarray[funcarray.length-1].split(")");
-			funcarray[funcarray.length-1] = lastVal[0];
+			params = fieldVal.concat(params)
 
-			if(!this.validation_checks[funcToCall].apply(this,funcarray))
+			if(!this.validation_checks[funcToCall].apply(this,params))
 			{
 				return this.properties[key].errorMessages[i];
 			}

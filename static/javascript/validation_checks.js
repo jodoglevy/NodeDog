@@ -51,12 +51,9 @@ function validateClientSide(form)
 {
     for(var key in properties)
 	{
- 		for(var i = 0; i < properties[key].validationsToPerform.length; i ++)
+ 		for(var i = 0; i < properties[key].functionsToCall.length; i ++)
 		{
- 			funcarray = properties[key].validationsToPerform[i].split("(");
-			funcToCall = funcarray[0];
-			
-			if(form[key].type == "text" || form[key].type == "hidden" || form[key].type == "password"
+ 			if(form[key].type == "text" || form[key].type == "hidden" || form[key].type == "password"
 			|| form[key].type == "textarea" || form[key].type == "select")
 			{
 				fieldVal = form[key].value;	
@@ -93,12 +90,13 @@ function validateClientSide(form)
 			{
 				fieldVal = "null";
 			}
+			fieldVal = [fieldVal];
 			
-			funcarray = (fieldVal + "," + funcarray[1]).split(",");
-			lastVal = funcarray[funcarray.length-1].split(")");
-			funcarray[funcarray.length-1] = lastVal[0];
-			
-			if(!validation_checks[funcToCall].apply(this,funcarray))
+			funcToCall = properties[key].functionsToCall[i];
+			params = properties[key].parametersToUse[i];
+			params = fieldVal.concat(params)
+						
+			if(!validation_checks[funcToCall].apply(this,params))
 			{
 				alert(properties[key].errorMessages[i]);
 				
