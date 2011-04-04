@@ -98,7 +98,15 @@ function validateClientSide(form,callbackOnInvalid)
 						
 			if(!validation_checks[funcToCall].apply(this,params))
 			{
-				return callbackOnInvalid.apply(this,[form,key,properties[key].errorMessages[i]]);
+				if(callbackOnInvalid != null)
+				{
+					return callbackOnInvalid.apply(this,[form,key,properties[key].errorMessages[i]]);
+				}
+				else
+				{
+					alert(properties[key].errorMessages[i]);
+					return false;	
+				}
 			}
 		}
 	}

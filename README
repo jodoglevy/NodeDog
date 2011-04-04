@@ -16,8 +16,8 @@ Include script validation_checks.js on the page with the form needing to be vali
 Include a script tag containing the output of validatorObject.getClientSideValidationProperties() (run this method server side);
 For the form to validate, add attribute onsubmit='return validateClientSide(this,callback_function_on_invalid);'
 Where callback_function_on_invalid is a function that will be called when the form fails validation.
-This function MUST take paramaters form (DOM object), fieldName (string), and errorMessage (string), in that order, with no other parameters
-If no callback function is specified, a default alert statement will be issued and the form will not submit.
+This function MUST take paramaters form (DOM object), fieldName (string), and errorMessage (string), in that order, with no other parameters.
+If no callback function is specified, an alert statement will be issued with the error message by default and the form will not submit.
 
 TO ADD ADDITIONAL VALIDATION CHECKS TO NODEDOG:
 In the validation_checks map in validation_checks.js, add a new key,value pair where the key is the name of the validation and the value is the function to validate
