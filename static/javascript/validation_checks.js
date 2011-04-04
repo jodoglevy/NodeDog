@@ -38,6 +38,18 @@ validation_checks =
 	function(value)
 	{
   		return (value != "null" && value.toString().search(/^-?[0-9]+$/) == 0);
+	},
+	
+	isNumber:
+	function(value)
+	{
+		return value != "null" && !isNaN(parseFloat(value)) && isFinite(value);
+	},
+	
+	isPositive:
+	function(value)
+	{
+		return value != "null" && parseFloat(value) > 0;
 	}
 }
 
