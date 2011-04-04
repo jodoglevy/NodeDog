@@ -1,8 +1,9 @@
 script(type='text/javascript',src='/javascript/validation_checks.js')
+script(type='text/javascript',src='/javascript/on_invalid.js')
 script(type='text/javascript') !{validate_properties}
 h1 Validation Tester
 #message #{msg}
-form(action='/', method='POST', onsubmit='return validateClientSide(this);')
+form(action='/', method='POST', onsubmit='return validateClientSide(this,onInvalid);')
   | <strong>Name:</strong>
   input(type='text', id='name', name='name')
   br

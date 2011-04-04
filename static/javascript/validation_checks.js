@@ -47,7 +47,7 @@ validation_checks =
 
 
 // client side version of NodeDog. Requires no change on your part!
-function validateClientSide(form) 
+function validateClientSide(form,callbackOnInvalid) 
 {
     for(var key in properties)
 	{
@@ -98,13 +98,7 @@ function validateClientSide(form)
 						
 			if(!validation_checks[funcToCall].apply(this,params))
 			{
-				alert(properties[key].errorMessages[i]);
-				
-				if(!(form[key] instanceof Array))
-				{
-					form[key].focus();
-				}
-				return false;
+				return callbackOnInvalid.apply(this,[form,key,properties[key].errorMessages[i]]);
 			}
 		}
 	}
