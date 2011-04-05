@@ -69,7 +69,7 @@ validate = function(objectHolder)
  			fieldVal = objectHolder[key];
 			if(fieldVal == null)
 			{
-				fieldVal = "null";
+				fieldVal = "";
 			}
 			fieldVal = [fieldVal];
 			

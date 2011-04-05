@@ -7,10 +7,10 @@ validation_checks =
 	required:
 	function(value)
 	{
-		return (value != "null" && value.length > 0);
+		return value.length > 0;
 	},
 
-	length:
+	lengthBetween:
 	function(value,min,max)
 	{
 		return validation_checks.minLength(value,min) && validation_checks.maxLength(value,max);
@@ -19,41 +19,136 @@ validation_checks =
 	exactLength:
 	function(value,exactly)
 	{
-		return validation_checks.length(value,exactly,exactly);
+		return validation_checks.lengthBetween(value,exactly,exactly);
 	},
 	
 	minLength:
 	function(value,min)
 	{
-		return (value != "null" && value.length >= min);
+		return value.length >= min;
 	},
 	
 	maxLength:
 	function(value,max)
 	{
-		return (value != "null" && value.length <= max);
-	},
-	
-	isInt:
-	function(value)
-	{
-  		return (value != "null" && value.toString().search(/^-?[0-9]+$/) == 0);
-	},
-	
-	isNumber:
-	function(value)
-	{
-		return value != "null" && !isNaN(parseFloat(value)) && isFinite(value);
+		return value.length <= max;
 	},
 	
 	isPositive:
 	function(value)
 	{
-		return value != "null" && parseFloat(value) > 0;
+		return parseFloat(value) > 0;
+	},
+	
+	isNegative:
+	function(value)
+	{
+		return parseFloat(value) < 0;
+	},
+	
+	isEmail: 
+	function(value)
+	{
+    	return value.match(/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/);
+	},
+
+    isUrl:
+    function(value)
+    {
+    	return value.match(/^(?:(?:ht|f)tp(?:s?)\:\/\/|~\/|\/)?(?:\w+:\w+@)?((?:(?:[-\w\d{1-3}]+\.)+(?:com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|edu|co\.uk|ac\.uk|it|fr|tv|museum|asia|local|travel|[a-z]{2}))|((\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)(\.(\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)){3}))(?::[\d]{1,5})?(?:(?:(?:\/(?:[-\w~!$+|.,=]|%[a-f\d]{2})+)+|\/)+|\?|#)?(?:(?:\?(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)(?:&(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)*)*(?:#(?:[-\w~!$ |\/.,*:;=]|%[a-f\d]{2})*)?$/);
+    },
+
+	isAlpha:
+	function(value)
+	{
+     	return value.match(/^[a-zA-Z]+$/);
+	},
+
+	isAlphanumeric:
+	function(value)
+	{
+     	return value.match(/^[a-zA-Z0-9]+$/);
+   	},
+
+    isNumeric:
+    function(value)
+    {
+		return value.match(/^-?[0-9]+$/);
+	},
+
+	isLowercase:
+	function(value)
+	{
+		return value.match(/^[a-z0-9]+$/);
+	},
+
+	isUppercase:
+	function(value)
+	{
+		return value.match(/^[A-Z0-9]+$/);
+	},
+
+	isInt:
+	function(value)
+	{
+  		return value.match(/^(?:-?(?:0|[1-9][0-9]*))$/);
+	},
+	
+	isDecimal:
+	function(value)
+	{
+  		return value.match(/^(?:-?(?:0|[1-9][0-9]*))?(?:\.[0-9]*)?$/);
+	},
+	
+	isFloat:
+	function(value)
+	{
+  		return validation_checks.isDecimal(value);
+	},
+	
+	equals:
+	function(value,compareValue)
+	{
+  		return value == compareValue;
+	},
+	
+	greaterThan:
+	function(value,compareValue)
+	{
+  		return value > compareValue;
+	},
+	
+	lessThan:
+	function(value,compareValue)
+	{
+  		return value < compareValue;
+	},
+
+	contains:
+	function(value,substring)
+	{
+		return !(value.indexOf(substring) === -1);
+	},
+	
+	notContains:
+	function(value,substring)
+	{
+		return !validation_checks.contains(value,substring);
+	},
+	
+	regex:
+	function(value,expression)
+	{
+		pattern = new RegExp(expression);
+		return value.match(pattern);
+	},
+	
+	notRegex:
+	function(value,expression)
+	{
+		return !validation_checks.regex(value,expression);
 	}
 }
-
-
 
 
 
@@ -100,7 +195,7 @@ function validateClientSide(form,callbackOnInvalid)
 			
 			if(fieldVal == null)
 			{
-				fieldVal = "null";
+				fieldVal = "";
 			}
 			fieldVal = [fieldVal];
 			
